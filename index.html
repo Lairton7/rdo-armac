@@ -96,42 +96,38 @@
 
     <script>
         const dadosEquipes = {
-            "A": [
-                {nome: "JOEL OLIVEIRA", funcao: "ELETROTÉCNICO III"},
-                {nome: "EDSON BENTES", funcao: "ELETROTÉCNICO II"},
-                {nome: "TIAGO ROCHA", funcao: "MECÂNICO II"}
-            ],
-            "B": [
-                {nome: "Raimundo Sousa", funcao: "ELETROTÉCNICO III"},
-                {nome: "Valber Ferreira", funcao: "ELETROTÉCNICO I"},
-                {nome: "André Santos", funcao: "MECÂNICO I"}
-            ],
-            "C": [
-                {nome: "Rayan Lobato", funcao: "ELETROTÉCNICO I"},
-                {nome: "Lairton Oliveira", funcao: "ELETROTÉCNICO I"},
-                {nome: "Felipe Souza", funcao: "MECÂNICO II"}
-            ],
-            "D": [
-                {nome: "Raimundo Serrão", funcao: "ELETROTÉCNICO III"},
-                {nome: "Daniel Printes", funcao: "MECÂNICO II"}
-            ]
+            "A": [{nome: "JOEL OLIVEIRA", funcao: "ELETROTÉCNICO III"}, {nome: "EDSON BENTES", funcao: "ELETROTÉCNICO II"}, {nome: "TIAGO ROCHA", funcao: "MECÂNICO II"}],
+            "B": [{nome: "RAIMUNDO SOUSA", funcao: "ELETROTÉCNICO III"}, {nome: "VALBER FERREIRA", funcao: "ELETROTÉCNICO I"}, {nome: "ANDRÉ SANTOS", funcao: "MECÂNICO I"}],
+            "C": [{nome: "RAYAN LOBATO", funcao: "ELETROTÉCNICO I"}, {nome: "LAIRTON OLIVEIRA", funcao: "ELETROTÉCNICO I"}, {nome: "FELIPE SOUZA", funcao: "MECÂNICO II"}],
+            "D": [{nome: "RAIMUNDO SERRAO", funcao: "ELETROTÉCNICO III"}, {nome: "DANIEL PRINTES", funcao: "MECÂNICO II"}]
         };
 
         const listaCondutores = ["ADENOR FILHO", "ANDRE SANTOS", "DANIEL PRINTES", "EDSON BENTES", "FELIPE SOUZA", "GABRIEL ANDRADE", "GILSON QUEIROZ", "JOEL OLIVEIRA", "LAIRTON OLIVEIRA", "MARCELO BARBOSA", "RAIMUNDO SERRAO", "RAIMUNDO SOUSA", "RAYAN LOBATO", "RODRIGO GATO", "ROSIVALDO ASSIS", "TIAGO ROCHA", "VALBER FERREIRA", "WILLAME TEXEIRA"].sort();
+
+        // Automação: Descrição da Atividade
+        const descArea = document.getElementById('descricao-atividade');
+        descArea.addEventListener('focus', () => { if(descArea.value === '') descArea.value = "1) "; });
+        descArea.addEventListener('keydown', (e) => {
+            if(e.key === 'Enter') {
+                const lines = descArea.value.split('\n');
+                const lastLine = lines[lines.length - 1];
+                const match = lastLine.match(/^(\d+)\)/);
+                if(match) {
+                    const nextNum = parseInt(match[1]) + 1;
+                    setTimeout(() => { descArea.value += `\n${nextNum}) `; }, 0);
+                }
+            }
+        });
 
         function preencherEquipe() {
             const turma = document.getElementById('campo-turma').value.toUpperCase().trim();
             const container = document.getElementById('container-equipe');
             container.innerHTML = '';
-
             if (dadosEquipes[turma]) {
                 dadosEquipes[turma].forEach((membro) => {
                     const wrapper = document.createElement('div');
                     wrapper.className = "flex gap-2 border-b border-gray-100 py-0.5";
-                    wrapper.innerHTML = `
-                        <input type="text" value="${membro.nome}" class="border-none p-0 w-2/3 bg-transparent text-xs" readonly>
-                        <input type="text" value="${membro.funcao}" class="border-none p-0 w-1/3 bg-transparent font-bold text-xs" readonly>
-                    `;
+                    wrapper.innerHTML = `<input type="text" value="${membro.nome}" class="border-none p-0 w-2/3 bg-transparent text-xs" readonly> <input type="text" value="${membro.funcao}" class="border-none p-0 w-1/3 bg-transparent font-bold text-xs" readonly>`;
                     container.appendChild(wrapper);
                 });
             }
@@ -139,19 +135,13 @@
 
         function popularCondutores() {
             const select = document.getElementById('condutor');
-            listaCondutores.forEach(nome => {
-                const opt = document.createElement('option');
-                opt.value = nome;
-                opt.textContent = nome;
-                select.appendChild(opt);
-            });
+            listaCondutores.forEach(nome => { select.innerHTML += `<option value="${nome}">${nome}</option>`; });
         }
 
         function atualizarDiaSemana() { 
             const val = document.getElementById('data-rdo').value;
             if(!val) return;
-            const [year, month, day] = val.split('-').map(Number);
-            const d = new Date(year, month - 1, day);
+            const d = new Date(val.replace(/-/g, '\/'));
             const dias = ['DOMINGO', 'SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO']; 
             document.getElementById('dia-semana').value = dias[d.getDay()]; 
         }
@@ -174,10 +164,7 @@
         
         window.onload = () => { 
             const hoje = new Date();
-            const ano = hoje.getFullYear();
-            const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-            const dia = String(hoje.getDate()).padStart(2, '0');
-            document.getElementById('data-rdo').value = `${ano}-${mes}-${dia}`;
+            document.getElementById('data-rdo').valueAsDate = hoje;
             atualizarDiaSemana(); 
             rdoApp.atualizarTurno();
             popularCondutores();
