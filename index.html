@@ -2,53 +2,49 @@
 <html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RDO ARMAC - Operacional</title>
+    <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .bg-armac { background-color: #111184; }
         .text-armac { color: #111184; }
-        
         #printable { font-size: 13px; line-height: 1.25; }
         #printable input, #printable select, #printable textarea { font-size: 12px; border-radius: 0 !important; box-shadow: none !important; }
         textarea { resize: none; width: 100%; border: 1px solid #cbd5e0; padding: 0.5rem; }
-        
         @media print {
             body { background: white; padding: 0; }
-            #printable { 
-                border: none !important; 
-                width: 100%; 
-                max-width: 100%; 
-                margin: 0; 
-                padding: 0;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
+            #printable { border: none !important; width: 100%; max-width: 100%; margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             .no-print { display: none !important; }
             @page { size: A4; margin: 1cm; }
         }
     </style>
 </head>
 <body class="bg-gray-100 p-4 text-black">
+
+    <div class="max-w-4xl mx-auto mb-6 flex flex-wrap gap-2 justify-center no-print bg-white p-4 rounded shadow">
+        <button onclick="salvarRDO()" class="bg-blue-600 text-white px-4 py-2 rounded font-bold hover:bg-blue-700">💾 SALVAR RDO (DOWNLOAD)</button>
+        <button onclick="document.getElementById('input-arquivo').click()" class="bg-purple-600 text-white px-4 py-2 rounded font-bold hover:bg-purple-700">📂 ABRIR RDO</button>
+        <input type="file" id="input-arquivo" class="hidden" accept=".json" onchange="carregarRDO(event)">
+        <button onclick="location.reload()" class="bg-gray-500 text-white px-4 py-2 rounded font-bold hover:bg-gray-600">✨ NOVO RDO</button>
+    </div>
+
     <div id="printable" class="max-w-4xl mx-auto bg-white p-5 border border-gray-300">
-        
-        <!-- Cabeçalho -->
         <div class="border-2 border-black p-3 mb-4 flex justify-between items-center bg-armac text-white">
             <div class="font-black text-2xl">ARMAC</div>
             <h1 class="text-base font-bold uppercase">Relatório Diário de Operação (RDO)</h1>
             <div class="text-[9px] uppercase font-bold text-right leading-tight">Locação de Máquinas<br>e Equipamentos</div>
         </div>
 
-        <!-- Dados Gerais -->
         <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-sm mb-4">
             <p><strong>DIA DO MÊS:</strong> <input type="date" id="data-rdo" onchange="atualizarDiaSemana()" class="border-b w-full"></p>
             <p><strong>DIA DA SEMANA:</strong> <input type="text" id="dia-semana" readonly class="border-b w-full bg-gray-50"></p>
-            <p><strong>TURMA:</strong> <input type="text" value="C" class="border-b w-full"></p>
-            <p><strong>NÚCLEO:</strong> <input type="text" value="ARMAC GERADORES" class="border-b w-full"></p>
-            <p><strong>MUNICÍPIO:</strong> <input type="text" value="ORIXIMINÁ" class="border-b w-full"></p>
-            <p><strong>ESTADO:</strong> <input type="text" value="PARÁ" class="border-b w-full"></p>
+            <p><strong>TURMA:</strong> <input type="text" id="turma" value="C" class="border-b w-full"></p>
+            <p><strong>NÚCLEO:</strong> <input type="text" id="nucleo" value="ARMAC GERADORES" class="border-b w-full"></p>
+            <p><strong>MUNICÍPIO:</strong> <input type="text" id="municipio" value="ORIXIMINÁ" class="border-b w-full"></p>
+            <p><strong>ESTADO:</strong> <input type="text" id="estado" value="PARÁ" class="border-b w-full"></p>
         </div>
 
-        <!-- Seletor de Turno -->
         <div class="mb-4">
             <label class="font-bold text-xs block text-armac mb-1">SELECIONE O TURNO:</label>
             <select id="seletor-turno" onchange="rdoApp.atualizarTurno()" class="w-full border-2 border-armac p-1.5 font-bold uppercase text-xs">
@@ -58,7 +54,6 @@
             </select>
         </div>
 
-        <!-- Tabela Tempo e Registro -->
         <div class="flex gap-4 mb-4">
             <div class="w-1/3">
                 <table class="w-full text-xs text-center border-collapse border border-armac">
@@ -80,12 +75,11 @@
             </div>
         </div>
 
-        <!-- DDS e Descrição -->
         <div class="border p-3 mb-4 text-xs border-armac">
             <h3 class="font-bold mb-2 border-b text-armac uppercase">DDS: DIÁLOGO DIÁRIO DE SEGURANÇA</h3>
             <div class="grid grid-cols-2 gap-4 mb-2">
-                <p><strong>TEMA:</strong> <input type="text" class="border-b w-full"></p>
-                <p><strong>COORDENADOR:</strong> <input type="text" class="border-b w-full"></p>
+                <p><strong>TEMA:</strong> <input type="text" id="dds-tema" class="border-b w-full"></p>
+                <p><strong>COORDENADOR:</strong> <input type="text" id="dds-coord" class="border-b w-full"></p>
             </div>
             <h3 class="font-bold border-b mb-1 text-armac uppercase">Descrição da Atividade</h3>
             <textarea id="descricao-atividade" rows="10" class="text-xs"></textarea>
@@ -95,14 +89,12 @@
             <button onclick="adicionarMembro()" class="no-print mt-2 w-full bg-armac text-white py-1 rounded font-bold text-xs">+ ADICIONAR MEMBRO</button>
         </div>
 
-        <!-- Equipamentos -->
         <div class="grid grid-cols-3 gap-3 mb-4 text-xs">
             <p><strong>VEÍCULO:</strong> <select id="veiculo" class="border-b w-full bg-white"><option value="">Selecione...</option><option>ARM-252</option><option>ARM-256</option><option>ARM-259</option><option>ARM-261</option></select></p>
             <p><strong>CONDUTOR:</strong> <select id="condutor" class="border-b w-full bg-white"><option value="">Selecione...</option></select></p>
             <p><strong>HORÍMETRO:</strong> <input type="number" id="horimetro" class="border-b w-full"></p>
         </div>
 
-        <!-- Assinaturas -->
         <div class="grid grid-cols-2 gap-8 mt-8 pt-4 text-center text-xs">
             <div class="flex flex-col items-center"><div class="border-b border-black w-full mb-1"></div><p class="font-bold uppercase">Assinatura do Encarregado da Contratada</p></div>
             <div class="flex flex-col items-center"><div class="border-b border-black w-full mb-1"></div><p class="font-bold uppercase">Assinatura da Fiscalização</p></div>
@@ -112,29 +104,116 @@
     <button onclick="window.print()" class="no-print w-full mt-6 bg-green-700 text-white py-3 rounded font-bold hover:bg-green-800 text-lg">🖨️ IMPRIMIR A4</button>
 
     <script>
+        if ('serviceWorker' in navigator && window.location.protocol !== 'blob:') { 
+            navigator.serviceWorker.register('sw.js').catch(console.error); 
+        }
+
         const listaEquipe = ["ADENOR FILHO", "ADRIANO GUERREIRO", "ANDRE SANTOS", "DANIEL PRINTES", "EDSON BENTES", "FELIPE SOUZA", "GABRIEL ANDRADE", "GILSON QUEIROZ", "GLEYDSON SANTOS", "JOEL OLIVEIRA", "LAIRTON OLIVEIRA", "MARCELO BARBOSA", "RAIMUNDO SERRAO", "RAIMUNDO SOUSA", "RAYAN LOBATO", "RODRIGO GATO", "ROSIVALDO ASSIS", "THALLES FERREIRA", "TIAGO ROCHA", "VALBER FERREIRA", "WILLAME TEXEIRA"].sort();
         const cargos = ["Téc. Eletrotécnico I", "Téc. Eletrotécnico II", "Téc. Eletrotécnico III", "Mecânico I", "Mecânico II", "Mecânico III"];
 
-        function adicionarMembro() { 
+        function adicionarMembro(nome = "", cargo = "") { 
             const container = document.getElementById('equipe-container'); 
             const div = document.createElement('div'); 
             div.className = "grid grid-cols-2 gap-1"; 
             div.innerHTML = `
-                <select class="border-b w-full text-xs">
-                    <option value="">Selecione...</option>${listaEquipe.map(n => `<option>${n}</option>`).join('')}
+                <select class="member-name border-b w-full text-xs">
+                    <option value="">Selecione...</option>${listaEquipe.map(n => `<option ${n === nome ? 'selected' : ''}>${n}</option>`).join('')}
                 </select>
                 <div class="flex gap-1">
-                    <select class="border-b w-full text-[10px]">
-                        ${cargos.map(c => `<option>${c}</option>`).join('')}
+                    <select class="member-cargo border-b w-full text-[10px]">
+                        ${cargos.map(c => `<option ${c === cargo ? 'selected' : ''}>${c}</option>`).join('')}
                     </select>
                     <button onclick="this.parentElement.parentElement.remove()" class="no-print text-red-600 font-bold px-1">×</button>
                 </div>`; 
             container.appendChild(div); 
         }
 
-        function atualizarDiaSemana() { const d = new Date(document.getElementById('data-rdo').value); const dias = ['DOMINGO', 'SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO']; document.getElementById('dia-semana').value = isNaN(d.getDay()) ? "" : dias[d.getDay()]; }
+        function atualizarDiaSemana() { 
+            const val = document.getElementById('data-rdo').value;
+            if(!val) return;
+            const [year, month, day] = val.split('-').map(Number);
+            const d = new Date(year, month - 1, day);
+            const dias = ['DOMINGO', 'SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO']; 
+            document.getElementById('dia-semana').value = dias[d.getDay()]; 
+        }
+
+        function salvarRDO() {
+            const data = document.getElementById('data-rdo').value || "sem-data";
+            const equipe = Array.from(document.querySelectorAll('#equipe-container > div')).map(div => ({
+                nome: div.querySelector('.member-name').value,
+                cargo: div.querySelector('.member-cargo').value
+            }));
+            const dados = {
+                data, turma: document.getElementById('turma').value,
+                nucleo: document.getElementById('nucleo').value, municipio: document.getElementById('municipio').value,
+                estado: document.getElementById('estado').value, turno: document.getElementById('seletor-turno').value,
+                horarios: {
+                    deslocamento: document.getElementById('horario-deslocamento').value,
+                    servico: document.getElementById('horario-servico').value,
+                    refeicao: document.getElementById('horario-refeicao').value,
+                    fimServico: document.getElementById('horario-fim-servico').value,
+                    fimDeslocamento: document.getElementById('horario-fim-deslocamento').value
+                },
+                dds: { tema: document.getElementById('dds-tema').value, coord: document.getElementById('dds-coord').value },
+                descricao: document.getElementById('descricao-atividade').value,
+                veiculo: document.getElementById('veiculo').value,
+                condutor: document.getElementById('condutor').value,
+                horimetro: document.getElementById('horimetro').value,
+                equipe
+            };
+            const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = `RDO_${data}.json`; a.click();
+        }
+
+        function carregarRDO(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const dados = JSON.parse(e.target.result);
+                document.getElementById('data-rdo').value = dados.data;
+                atualizarDiaSemana();
+                document.getElementById('turma').value = dados.turma;
+                document.getElementById('nucleo').value = dados.nucleo;
+                document.getElementById('municipio').value = dados.municipio;
+                document.getElementById('estado').value = dados.estado;
+                document.getElementById('seletor-turno').value = dados.turno;
+                rdoApp.atualizarTurno();
+                document.getElementById('horario-deslocamento').value = dados.horarios.deslocamento;
+                document.getElementById('horario-servico').value = dados.horarios.servico;
+                document.getElementById('horario-refeicao').value = dados.horarios.refeicao;
+                document.getElementById('horario-fim-servico').value = dados.horarios.fimServico;
+                document.getElementById('horario-fim-deslocamento').value = dados.horarios.fimDeslocamento;
+                document.getElementById('dds-tema').value = dados.dds.tema;
+                document.getElementById('dds-coord').value = dados.dds.coord;
+                document.getElementById('descricao-atividade').value = dados.descricao;
+                document.getElementById('veiculo').value = dados.veiculo;
+                document.getElementById('condutor').value = dados.condutor;
+                document.getElementById('horimetro').value = dados.horimetro;
+                document.getElementById('equipe-container').innerHTML = '';
+                dados.equipe.forEach(m => adicionarMembro(m.nome, m.cargo));
+            };
+            reader.readAsText(file);
+        }
+
         const rdoApp = { atualizarTurno() { const c = { "07:00": {d:"07:30", s:"08:00", r:"11:30-12:30", fs:"16:00", fd:"16:30"}, "16:00": {d:"15:30", s:"16:00", r:"19:00-20:00", fs:"00:00", fd:"00:30"}, "00:00": {d:"00:30", s:"00:50", r:"02:00-03:00", fs:"07:00", fd:"07:30"} }; const val = c[document.getElementById('seletor-turno').value]; document.getElementById('horario-deslocamento').value = val.d; document.getElementById('horario-servico').value = val.s; document.getElementById('horario-refeicao').value = val.r; document.getElementById('horario-fim-servico').value = val.fs; document.getElementById('horario-fim-deslocamento').value = val.fd; } };
-        window.onload = () => { for(let i=0; i<3; i++) adicionarMembro(); rdoApp.atualizarTurno(); const cSelect = document.getElementById('condutor'); listaEquipe.forEach(n => cSelect.innerHTML += `<option>${n}</option>`); };
+        
+        window.onload = () => { 
+            // Definindo data localmente para evitar erro de fuso horário
+            const hoje = new Date();
+            const ano = hoje.getFullYear();
+            const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+            const dia = String(hoje.getDate()).padStart(2, '0');
+            document.getElementById('data-rdo').value = `${ano}-${mes}-${dia}`;
+            
+            atualizarDiaSemana(); 
+            for(let i=0; i<3; i++) adicionarMembro(); 
+            rdoApp.atualizarTurno(); 
+            const cSelect = document.getElementById('condutor'); 
+            listaEquipe.forEach(n => cSelect.innerHTML += `<option>${n}</option>`); 
+        };
     </script>
 </body>
 </html>
