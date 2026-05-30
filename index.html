@@ -106,18 +106,33 @@
 
         const listaCondutores = ["ADENOR FILHO", "ANDRE SANTOS", "DANIEL PRINTES", "EDSON BENTES", "FELIPE SOUZA", "GABRIEL ANDRADE", "GILSON QUEIROZ", "JOEL OLIVEIRA", "LAIRTON OLIVEIRA", "MARCELO BARBOSA", "RAIMUNDO SERRAO", "RAIMUNDO SOUSA", "RAYAN LOBATO", "RODRIGO GATO", "ROSIVALDO ASSIS", "TIAGO ROCHA", "VALBER FERREIRA", "WILLAME TEXEIRA"].sort();
 
-        // Automação: Descrição da Atividade
         const descArea = document.getElementById('descricao-atividade');
-        descArea.addEventListener('focus', () => { if(descArea.value === '') descArea.value = "1) "; });
+        
+        descArea.addEventListener('focus', () => { 
+            if(descArea.value.trim() === '') {
+                descArea.value = "1) "; 
+            }
+        });
+
         descArea.addEventListener('keydown', (e) => {
-            if(e.key === 'Enter') {
+            if (e.key === 'Enter') {
+                e.preventDefault();
                 const lines = descArea.value.split('\n');
-                const lastLine = lines[lines.length - 1];
-                const match = lastLine.match(/^(\d+)\)/);
-                if(match) {
-                    const nextNum = parseInt(match[1]) + 1;
-                    setTimeout(() => { descArea.value += `\n${nextNum}) `; }, 0);
-                }
+                
+                // Reconstrói a lista verificando os números existentes
+                let lastNum = 0;
+                let newContent = lines.map(line => {
+                    const match = line.match(/^(\d+)\)/);
+                    if (match) {
+                        lastNum = parseInt(match[1]);
+                        return line;
+                    }
+                    return line;
+                });
+                
+                // Adiciona o próximo número da sequência
+                newContent.push(`${lastNum + 1}) `);
+                descArea.value = newContent.join('\n');
             }
         });
 
