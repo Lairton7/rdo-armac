@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RDO ARMAC - Operacional</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         .bg-armac { background-color: #111184; }
         .text-armac { color: #111184; }
@@ -21,9 +22,9 @@
 </head>
 <body class="bg-gray-100 p-4 text-black">
 
+    <div id="printable" class="max-w-4xl mx-auto bg-white p-6 shadow-md border border-gray-300">
         <div class="border-2 border-black p-3 mb-4 flex justify-between items-center bg-armac text-white">
             <div class="flex items-center gap-2">
-                <img src="logo.png" alt="Logo Armac" class="h-10 w-10 object-contain bg-white p-1 rounded">
                 <div class="font-black text-2xl">ARMAC</div>
             </div>
             <h1 class="text-base font-bold uppercase">Relatório Diário de Operação (RDO)</h1>
@@ -94,7 +95,9 @@
         </div>
     </div>
 
-    <button onclick="window.print()" class="no-print w-full mt-6 bg-green-700 text-white py-3 rounded font-bold hover:bg-green-800 text-lg">🖨️ IMPRIMIR A4</button>
+    <button onclick="baixarPDF()" class="no-print w-full max-w-4xl mx-auto block mt-6 bg-blue-700 text-white py-3 rounded font-bold hover:bg-blue-800 text-lg text-center shadow-md">
+        📥 BAIXAR COMO PDF
+    </button>
 
     <script>
         const dadosEquipes = {
@@ -163,6 +166,23 @@
                 document.getElementById('horario-fim-deslocamento').value = val.fd; 
             } 
         };
+
+        // Função Javascript para estruturar e automatizar o Download
+        function baixarPDF() {
+            const elemento = document.getElementById('printable');
+            const dataRdo = document.getElementById('data-rdo').value || 'RDO';
+            const turma = document.getElementById('campo-turma').value.toUpperCase().trim() || 'Sem-Turma';
+            
+            const opcoes = {
+                margin:       [10, 10, 10, 10],
+                filename:     `RDO_ARMAC_${dataRdo}_Turma_${turma}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opcoes).from(elemento).save();
+        }
         
         window.onload = () => { 
             const hoje = new Date();
