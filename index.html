@@ -11,8 +11,19 @@
         /* Fonte global definida para 12px */
         body { font-size: 12px; }
         #printable { font-size: 12px; line-height: 1.2; }
-        #printable input, #printable select, #printable textarea { font-size: 12px; border-radius: 0 !important; box-shadow: none !important; text-transform: uppercase; }
+        
+        /* Aplicando uppercase apenas em inputs e selects */
+        #printable input, #printable select { 
+            font-size: 12px; border-radius: 0 !important; box-shadow: none !important; text-transform: uppercase; 
+        }
+        
+        /* Deixando a textarea livre para maiúsculas e minúsculas */
+        #printable textarea { 
+            font-size: 12px; border-radius: 0 !important; box-shadow: none !important; 
+        }
+
         textarea { resize: none; width: 100%; border: 1px solid #cbd5e0; padding: 0.25rem; }
+        
         @media print {
             body { background: white; padding: 0; }
             #printable { border: none !important; width: 100%; max-width: 100%; margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
@@ -77,7 +88,7 @@
                 <p><strong>COORDENADOR:</strong> <input type="text" id="dds-coord" class="border-b w-full"></p>
             </div>
             <h3 class="font-bold border-b mb-1 text-armac uppercase">Descrição da Atividade</h3>
-            <textarea id="descricao-atividade" rows="28" class="uppercase"></textarea>
+            <textarea id="descricao-atividade" rows="28"></textarea>
             
             <label class="font-bold block mt-1 mb-0.5 underline text-armac uppercase">Equipe (Preenchida via Turma):</label>
             <div id="container-equipe" class="grid grid-cols-1 gap-0.5"></div>
@@ -110,7 +121,8 @@
         const listaCondutores = ["ADENOR FILHO", "ANDRE SANTOS", "DANIEL PRINTES", "EDSON BENTES", "FELIPE SOUZA", "GABRIEL ANDRADE", "GILSON QUEIROZ", "JOEL OLIVEIRA", "LAIRTON OLIVEIRA", "MARCELO BARBOSA", "RAIMUNDO SERRAO", "RAIMUNDO SOUSA", "RAYAN LOBATO", "RODRIGO GATO", "ROSIVALDO ASSIS", "TIAGO ROCHA", "VALBER FERREIRA", "WILLAME TEXEIRA"].sort();
         
         const descArea = document.getElementById('descricao-atividade');
-        
+        let lastEnterTime = 0;
+
         function imprimirRDO() {
             const dataInput = document.getElementById('data-rdo').value;
             const dataFormatada = dataInput ? dataInput.split('-').reverse().join('.') : new Date().toLocaleDateString().replace(/\//g, '.');
