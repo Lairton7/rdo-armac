@@ -17,7 +17,7 @@
         
         /* Estilo para o editor contenteditable */
         .editor-conteudo {
-            border: 1px solid #cbd5e0;
+            border: 1px solid #cccccc;
             padding: 0.25rem;
             min-height: 300px;
             max-height: 400px;
@@ -28,7 +28,7 @@
         }
         .editor-conteudo:focus {
             outline: none;
-            border-color: #111184;
+            border-color: #333333;
         }
         .editor-conteudo strong {
             font-weight: bold;
@@ -38,6 +38,16 @@
         }
         .editor-conteudo u {
             text-decoration: underline;
+        }
+        
+        /* Estilo para inputs com borda suave */
+        input, select, .border-b {
+            border-bottom: 1px solid #cccccc !important;
+        }
+        
+        input:focus, select:focus {
+            border-bottom-color: #333333 !important;
+            outline: none;
         }
         
         /* Barra de formatação mais discreta */
@@ -87,13 +97,13 @@
         }
         .campo-editavel {
             font-weight: bold;
-            border-bottom: 1px solid #111184;
+            border-bottom: 1px solid #cccccc;
             background: transparent;
             min-width: 200px;
         }
         .campo-editavel:focus {
             outline: none;
-            border-bottom-color: #000;
+            border-bottom-color: #333333;
         }
         
         /* Estilo para os nomes da equipe - mais equilibrado */
@@ -136,7 +146,7 @@
 
         <div class="mb-3">
             <label class="font-bold block text-armac mb-0.5">SELECIONE O TURNO:</label>
-            <select id="seletor-turno" onchange="rdoApp.atualizarTurno()" class="w-full border-2 border-armac p-1 font-bold uppercase">
+            <select id="seletor-turno" onchange="rdoApp.atualizarTurno()" class="w-full border-2 border-gray-300 p-1 font-bold uppercase">
                 <option value="07:00">07:00 - 16:00 (DESL 7:30 / SERV 8:00)</option>
                 <option value="16:00">16:00 - 00:00 (DESL 15:30 / SERV 16:00)</option>
                 <option value="00:00">00:00 - 07:00 (DESL 00:30 / SERV 00:50)</option>
@@ -144,27 +154,27 @@
         </div>
 
         <div class="flex gap-4 mb-3">
-            <div class="w-1/4">
-                <table class="w-full text-center border-collapse border border-armac">
-                    <tr class="bg-armac text-white font-bold"><td>TEMPO</td><td>M</td><td>T</td><td>N</td></tr>
-                    <tr><td class="font-bold border">BOM</td>
-                    <td class="border"><input type="checkbox"></td>
-                    <td class="border"><input type="checkbox"></td>
-                    <td class="border"><input type="checkbox"></td>
+            <div class="w-1/4 tempo-table">
+                <table class="w-full text-center">
+                    <tr class="bg-armac text-white font-bold"><td>TEMPO</th><th>M</th><th>T</th><th>N</th></tr>
+                    <tr><td class="font-bold border border-armac">BOM</td>
+                    <td class="border border-armac"><input type="checkbox"></td>
+                    <td class="border border-armac"><input type="checkbox"></td>
+                    <td class="border border-armac"><input type="checkbox"></td>
                 </tr>
-                <tr><td class="font-bold border">INST</td>
-                    <td class="border"><input type="checkbox"></td>
-                    <td class="border"><input type="checkbox"></td>
-                    <td class="border"><input type="checkbox"></td>
+                <tr><td class="font-bold border border-armac">INST</td>
+                    <td class="border border-armac"><input type="checkbox"></td>
+                    <td class="border border-armac"><input type="checkbox"></td>
+                    <td class="border border-armac"><input type="checkbox"></td>
                 </tr>
-                <tr><td class="font-bold border">CHUVA</td>
-                    <td class="border"><input type="checkbox"></td>
-                    <td class="border"><input type="checkbox"></td>
-                    <td class="border"><input type="checkbox"></td>
+                <tr><td class="font-bold border border-armac">CHUVA</td>
+                    <td class="border border-armac"><input type="checkbox"></td>
+                    <td class="border border-armac"><input type="checkbox"></td>
+                    <td class="border border-armac"><input type="checkbox"></td>
                 </tr>
                 </table>
             </div>
-            <div class="w-2/4 border p-2 border-armac">
+            <div class="w-2/4 border p-2 border-gray-300">
                 <h3 class="font-bold border-b mb-1 text-armac uppercase text-[12px]">Registro da Contratada</h3>
                 <div class="space-y-0.5">
                     <p>INÍCIO DESLOC: <input type="text" id="horario-deslocamento" class="border-b w-16"></p>
@@ -175,10 +185,10 @@
                 </div>
             </div>
             <div class="w-1/4 flex flex-col gap-1">
-                <div class="border border-armac p-1 text-center text-[10px]">
+                <div class="border border-gray-300 p-1 text-center text-[10px]">
                     <p><strong>RDO: </strong>V1/26</p>
                 </div>
-                <div class="border border-armac p-1 text-center flex-grow text-[10px]">
+                <div class="border border-gray-300 p-1 text-center flex-grow text-[10px]">
                     <p><strong>TEMPO TOTAL: 7:00h</strong></p>
                     <div class="mt-1">
                         DESLOCAMENTO: 1h<br>TRABALHO: -1H
@@ -187,18 +197,18 @@
             </div>
         </div>
 
-        <div class="border p-2 mb-3 border-armac">
-    <h3 class="font-bold mb-1 border-b text-armac uppercase">DDS: DIÁLOGO DIÁRIO DE SEGURANÇA</h3>
-    <div class="grid grid-cols-2 gap-4 mb-2">
-        <div class="flex items-center gap-2">
-            <span class="campo-fixo">TEMA:</span>
-            <input type="text" id="dds-tema" class="border-b flex-1 font-bold text-black uppercase" style="box-shadow: none; outline: none; -webkit-box-shadow: none;" value="">
-        </div>
-        <div class="flex items-center gap-2">
-            <span class="campo-fixo">COORDENADOR:</span>
-            <input type="text" id="dds-coord" class="border-b flex-1 font-bold text-black uppercase" style="box-shadow: none; outline: none; -webkit-box-shadow: none;" value="">
-        </div>
-    </div>
+        <div class="border p-2 mb-3 border-gray-300">
+            <h3 class="font-bold mb-1 border-b text-armac uppercase">DDS: DIÁLOGO DIÁRIO DE SEGURANÇA</h3>
+            <div class="grid grid-cols-2 gap-4 mb-2">
+                <div class="flex items-center gap-2">
+                    <span class="campo-fixo">TEMA:</span>
+                    <input type="text" id="dds-tema" class="border-b flex-1 font-bold text-black uppercase" style="box-shadow: none; outline: none; -webkit-box-shadow: none;" value="">
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="campo-fixo">COORDENADOR:</span>
+                    <input type="text" id="dds-coord" class="border-b flex-1 font-bold text-black uppercase" style="box-shadow: none; outline: none; -webkit-box-shadow: none;" value="">
+                </div>
+            </div>
             <h3 class="font-bold border-b mb-1 text-armac black uppercase">DESCRIÇÃO DA ATIVIDADE</h3>
             
             <!-- BARRA DE FORMATAÇÃO MAIS DISCRETA -->
@@ -231,7 +241,7 @@
             <div id="container-equipe" class="grid grid-cols-1 gap-0.5"></div>
         </div>
 
-        <div class="grid grid-cols-3 gap-2 mb-3 border-b text-armac uppercase" style="font-weight: 500; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+        <div class="grid grid-cols-3 gap-2 mb-3 text-armac uppercase" style="font-weight: 500; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
             <p><strong style="font-weight: 600;">VEÍCULO:</strong> <select id="veiculo" class="border-b w-full mb-1 text-black uppercase" style="font-weight: 500; box-shadow: none; outline: none; -webkit-box-shadow: none; -webkit-font-smoothing: subpixel-antialiased;"><option value="">SELECIONE...</option><option>ARM-252</option><option>ARM-256</option><option>ARM-259</option><option>ARM-261</option></select></p>
             <p><strong style="font-weight: 600;">CONDUTOR:</strong> <select id="condutor" class="border-b w-full mb-1 text-black uppercase" style="font-weight: 500; box-shadow: none; outline: none; -webkit-box-shadow: none; -webkit-font-smoothing: subpixel-antialiased;"><option value="">SELECIONE...</option></select></p>
             <p><strong style="font-weight: 600;">HORÍMETRO:</strong> <input type="number" id="horimetro" class="border-b w-full mb-1 text-black uppercase" style="font-weight: 500; box-shadow: none; outline: none; -webkit-box-shadow: none; -webkit-font-smoothing: subpixel-antialiased;"></p>
