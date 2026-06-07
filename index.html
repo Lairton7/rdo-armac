@@ -15,16 +15,102 @@
             font-size: 12px; border-radius: 0 !important; box-shadow: none !important; text-transform: uppercase; 
         }
         
-        #printable textarea { 
-            font-size: 12px; border-radius: 0 !important; box-shadow: none !important; 
+        /* Estilo para o editor contenteditable */
+        .editor-conteudo {
+            border: 1px solid #cbd5e0;
+            padding: 0.25rem;
+            min-height: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: white;
+            font-family: monospace;
+            white-space: pre-wrap;
         }
-
-        textarea { resize: none; width: 100%; border: 1px solid #cbd5e0; padding: 0.25rem; }
+        .editor-conteudo:focus {
+            outline: none;
+            border-color: #111184;
+        }
+        .editor-conteudo strong {
+            font-weight: bold;
+        }
+        .editor-conteudo em {
+            font-style: italic;
+        }
+        .editor-conteudo u {
+            text-decoration: underline;
+        }
+        
+        /* Barra de formatação mais discreta */
+        .format-toolbar {
+            display: flex;
+            gap: 3px;
+            margin-bottom: 5px;
+            padding: 3px;
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .format-toolbar button {
+            padding: 2px 6px;
+            font-size: 11px;
+            cursor: pointer;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            min-width: 28px;
+        }
+        .format-toolbar button:hover {
+            background: #e8e8e8;
+        }
+        .format-toolbar select {
+            padding: 2px 4px;
+            font-size: 11px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+        }
+        .separador {
+            width: 1px;
+            height: 20px;
+            background: #ccc;
+            margin: 0 3px;
+        }
+        
+        /* Estilo fixo para TEMA e COORDENADOR */
+        .campo-fixo {
+            display: inline-block;
+            font-weight: bold;
+            color: black;
+            background: transparent;
+            border: none;
+            pointer-events: none;
+        }
+        .campo-editavel {
+            font-weight: bold;
+            border-bottom: 1px solid #111184;
+            background: transparent;
+            min-width: 200px;
+        }
+        .campo-editavel:focus {
+            outline: none;
+            border-bottom-color: #000;
+        }
+        
+        /* Estilo para os nomes da equipe - mais equilibrado */
+        .nome-equipe {
+            font-weight: 650 !important;
+            font-size: 12px;
+        }
+        .funcao-equipe {
+            font-weight: 550 !important;
+        }
         
         @media print {
             body { background: white; padding: 0; }
             #printable { border: none !important; width: 100%; max-width: 100%; margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             .no-print { display: none !important; }
+            .format-toolbar { display: none !important; }
+            .editor-conteudo { border: none !important; padding: 0 !important; }
             @page { size: A4; margin: 0.5cm; }
         }
     </style>
@@ -34,18 +120,18 @@
     <div id="printable" class="max-w-4xl mx-auto bg-white p-4 border border-gray-300">
         <div class="border-2 border-black p-2 mb-3 flex justify-between items-center bg-armac text-white">
             <img src="logo.png" alt="Logo Armac" class="h-10 w-10 object-contain bg-white p-1 rounded" onerror="this.style.display='none'">
-            <div class="font-black text-xl">ARMAC</div>
+            <div class="font-black text-xl">ARMAC </div>
             <h1 class="text-sm font-bold uppercase">Relatório Diário de Operação (RDO)</h1>
             <div class="text-[12px] uppercase font-bold text-right leading-tight">Locação de Máquinas<br>Pesadas e Equipamentos</div>
         </div>
 
-        <div class="grid grid-cols-2 gap-x-4 gap-y-0.5 mb-3">
-            <p><strong>DIA DO MÊS:</strong> <input type="date" id="data-rdo" onchange="atualizarDiaSemana()" class="border-b w-full uppercase"></p>
-            <p><strong>DIA DA SEMANA:</strong> <input type="text" id="dia-semana" readonly class="border-b w-full bg-gray-50 uppercase"></p>
-            <p><strong>TURMA (A, B, C ou D):</strong> <input type="text" id="campo-turma" oninput="preencherEquipe()" class="border-b w-full uppercase"></p>
-            <p><strong>NÚCLEO:</strong> <input type="text" id="nucleo" value="ARMAC GERADORES" class="border-b w-full uppercase"></p>
-            <p><strong>MUNICÍPIO:</strong> <input type="text" id="municipio" value="ORIXIMINÁ" class="border-b w-full uppercase"></p>
-            <p><strong>ESTADO:</strong> <input type="text" id="estado" value="PARÁ" class="border-b w-full uppercase"></p>
+        <div class="border-b text-armac uppercase grid grid-cols-2 gap-x-4 gap-y-0.5 mb-3" style="font-weight: 500; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+            <p><strong style="font-weight: 600;">DIA DO MÊS:</strong> <input type="date" id="data-rdo" onchange="atualizarDiaSemana()" class="border-b w-full font-bold mb-1 text-black uppercase" style="box-shadow: none; outline: none; -webkit-box-shadow: none;"></p>
+            <p><strong style="font-weight: 600;">DIA DA SEMANA:</strong> <input type="text" id="dia-semana" readonly class="border-b w-full font-bold mb-1 text-black uppercase" style="box-shadow: none; outline: none; -webkit-box-shadow: none;"></p>
+            <p><strong style="font-weight: 600;">TURMA (A, B, C ou D):</strong> <input type="text" id="campo-turma" oninput="preencherEquipe()" class="border-b w-full font-bold mb-1 text-black uppercase" style="box-shadow: none; outline: none; -webkit-box-shadow: none;"></p>
+            <p><strong style="font-weight: 600;">NÚCLEO:</strong> <input type="text" id="nucleo" value="ARMAC GERADORES" class="border-b w-full font-bold mb-1 text-black uppercase" style="box-shadow: none; outline: none; -webkit-box-shadow: none;"></p>
+            <p><strong style="font-weight: 600;">MUNICÍPIO:</strong> <input type="text" id="municipio" value="ORIXIMINÁ" class="border-b w-full font-bold mb-1 text-black uppercase" style="box-shadow: none; outline: none; -webkit-box-shadow: none;"></p>
+            <p><strong style="font-weight: 600;">ESTADO:</strong> <input type="text" id="estado" value="PARÁ" class="border-b w-full font-bold mb-1 text-black uppercase" style="box-shadow: none; outline: none; -webkit-box-shadow: none;"></p>
         </div>
 
         <div class="mb-3">
@@ -61,9 +147,21 @@
             <div class="w-1/4">
                 <table class="w-full text-center border-collapse border border-armac">
                     <tr class="bg-armac text-white font-bold"><td>TEMPO</td><td>M</td><td>T</td><td>N</td></tr>
-                    <tr><td class="font-bold border">BOM</td><td class="border"><input type="checkbox"></td><td class="border"><input type="checkbox"></td><td class="border"><input type="checkbox"></td></tr>
-                    <tr><td class="font-bold border">INST</td><td class="border"><input type="checkbox"></td><td class="border"><input type="checkbox"></td><td class="border"><input type="checkbox"></td></tr>
-                    <tr><td class="font-bold border">CHUVA</td><td class="border"><input type="checkbox"></td><td class="border"><input type="checkbox"></td><td class="border"><input type="checkbox"></td></tr>
+                    <tr><td class="font-bold border">BOM</td>
+                    <td class="border"><input type="checkbox"></td>
+                    <td class="border"><input type="checkbox"></td>
+                    <td class="border"><input type="checkbox"></td>
+                </tr>
+                <tr><td class="font-bold border">INST</td>
+                    <td class="border"><input type="checkbox"></td>
+                    <td class="border"><input type="checkbox"></td>
+                    <td class="border"><input type="checkbox"></td>
+                </tr>
+                <tr><td class="font-bold border">CHUVA</td>
+                    <td class="border"><input type="checkbox"></td>
+                    <td class="border"><input type="checkbox"></td>
+                    <td class="border"><input type="checkbox"></td>
+                </tr>
                 </table>
             </div>
             <div class="w-2/4 border p-2 border-armac">
@@ -79,8 +177,6 @@
             <div class="w-1/4 flex flex-col gap-1">
                 <div class="border border-armac p-1 text-center text-[10px]">
                     <p><strong>RDO: </strong>V1/26</p>
-                    <p><strong></strong></p>
-                    <p><strong></strong></p>
                 </div>
                 <div class="border border-armac p-1 text-center flex-grow text-[10px]">
                     <p><strong>TEMPO TOTAL: 7:00h</strong></p>
@@ -92,22 +188,53 @@
         </div>
 
         <div class="border p-2 mb-3 border-armac">
-            <h3 class="font-bold mb-1 border-b text-armac uppercase">DDS: DIÁLOGO DIÁRIO DE SEGURANÇA</h3>
-            <div class="grid grid-cols-2 gap-4 mb-2">
-                <input type="text" id="dds-tema" value="TEMA: " class="font-bold mb-1 border-b text-black uppercase">
-                <input type="text" id="dds-coord" value="COORDENADOR: " class="font-bold mb-1 border-b text-black uppercase">
+    <h3 class="font-bold mb-1 border-b text-armac uppercase">DDS: DIÁLOGO DIÁRIO DE SEGURANÇA</h3>
+    <div class="grid grid-cols-2 gap-4 mb-2">
+        <div class="flex items-center gap-2">
+            <span class="campo-fixo">TEMA:</span>
+            <input type="text" id="dds-tema" class="border-b flex-1 font-bold text-black uppercase" style="box-shadow: none; outline: none; -webkit-box-shadow: none;" value="">
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="campo-fixo">COORDENADOR:</span>
+            <input type="text" id="dds-coord" class="border-b flex-1 font-bold text-black uppercase" style="box-shadow: none; outline: none; -webkit-box-shadow: none;" value="">
+        </div>
+    </div>
+            <h3 class="font-bold border-b mb-1 text-armac black uppercase">DESCRIÇÃO DA ATIVIDADE</h3>
+            
+            <!-- BARRA DE FORMATAÇÃO MAIS DISCRETA -->
+            <div class="format-toolbar no-print">
+                <select id="font-size-select">
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12" selected>12</option>
+                    <option value="14">14</option>
+                    <option value="16">16</option>
+                    <option value="18">18</option>
+                    <option value="20">20</option>
+                    <option value="24">24</option>
+                </select>
+                <button id="btn-bold" title="Negrito"><b>N</b></button>
+                <button id="btn-italic" title="Itálico"><i>I</i></button>
+                <button id="btn-underline" title="Sublinhado"><u>S</u></button>
+                <button id="btn-normal" title="Remover">⊗</button>
+                <span class="separador"></span>
+                <button id="btn-marcador-asterisco" title="Marcador *">*</button>
+                <button id="btn-marcador-circulo" title="Marcador ○">○</button>
+                <button id="btn-marcador-numero" title="Marcador Numérico 1)">1)</button>
+                <button id="btn-marcador-seta" title="Marcador ➤">➤</button>
             </div>
-            <h3 class="font-bold border-b mb-1 text-armac uppercase">DESCRIÇÃO DA ATIVIDADE</h3>
-            <textarea id="descricao-atividade" rows="18"></textarea>
+            
+            <!-- EDITOR CONTENTEDITABLE -->
+            <div id="descricao-atividade" class="editor-conteudo" contenteditable="true"></div>
             
             <label class="font-bold block mt-1 mb-0.5 underline text-armac uppercase">EQUIPE:</label>
             <div id="container-equipe" class="grid grid-cols-1 gap-0.5"></div>
         </div>
 
-        <div class="grid grid-cols-3 gap-2 mb-3">
-            <p><strong>VEÍCULO:</strong> <select id="veiculo" class="border-b w-full bg-white"><option value="">SELECIONE...</option><option>ARM-252</option><option>ARM-256</option><option>ARM-259</option><option>ARM-261</option></select></p>
-            <p><strong>CONDUTOR:</strong> <select id="condutor" class="border-b w-full bg-white"><option value="">SELECIONE...</option></select></p>
-            <p><strong>HORÍMETRO:</strong> <input type="number" id="horimetro" class="border-b w-full"></p>
+        <div class="grid grid-cols-3 gap-2 mb-3 border-b text-armac uppercase" style="font-weight: 500; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+            <p><strong style="font-weight: 600;">VEÍCULO:</strong> <select id="veiculo" class="border-b w-full mb-1 text-black uppercase" style="font-weight: 500; box-shadow: none; outline: none; -webkit-box-shadow: none; -webkit-font-smoothing: subpixel-antialiased;"><option value="">SELECIONE...</option><option>ARM-252</option><option>ARM-256</option><option>ARM-259</option><option>ARM-261</option></select></p>
+            <p><strong style="font-weight: 600;">CONDUTOR:</strong> <select id="condutor" class="border-b w-full mb-1 text-black uppercase" style="font-weight: 500; box-shadow: none; outline: none; -webkit-box-shadow: none; -webkit-font-smoothing: subpixel-antialiased;"><option value="">SELECIONE...</option></select></p>
+            <p><strong style="font-weight: 600;">HORÍMETRO:</strong> <input type="number" id="horimetro" class="border-b w-full mb-1 text-black uppercase" style="font-weight: 500; box-shadow: none; outline: none; -webkit-box-shadow: none; -webkit-font-smoothing: subpixel-antialiased;"></p>
         </div>
 
         <div class="mt-8 pt-6 grid grid-cols-2 gap-4 text-center">
@@ -132,6 +259,108 @@
         
         const descArea = document.getElementById('descricao-atividade');
 
+        // FUNÇÃO PARA OBTER O PRÓXIMO NÚMERO DO MARCADOR NUMÉRICO
+        function getProximoNumero() {
+            const texto = descArea.innerText;
+            const linhas = texto.split('\n');
+            let ultimoNumero = 0;
+            linhas.forEach(linha => {
+                const match = linha.match(/^\s*(\d+)\)/);
+                if (match) {
+                    const num = parseInt(match[1]);
+                    if (num > ultimoNumero) ultimoNumero = num;
+                }
+            });
+            return ultimoNumero + 1;
+        }
+
+        // FUNÇÃO PARA INSERIR MARCADOR
+        function inserirMarcador(tipo) {
+            descArea.focus();
+            
+            let marcador = '';
+            let comLinha = false;
+            
+            switch(tipo) {
+                case 'asterisco':
+                    marcador = '* ';
+                    comLinha = false;
+                    break;
+                case 'circulo':
+                    marcador = '○ ';
+                    comLinha = false;
+                    break;
+                case 'numero':
+                    const proxNum = getProximoNumero();
+                    marcador = `${proxNum}) `;
+                    comLinha = true;
+                    break;
+                case 'seta':
+                    marcador = '➤ ';
+                    comLinha = false;
+                    break;
+                default:
+                    return;
+            }
+            
+            // Para marcadores numéricos, adiciona quebra de linha antes
+            if (comLinha) {
+                const selection = window.getSelection();
+                const range = selection.getRangeAt(0);
+                const textoAntes = range.startContainer.textContent.substring(0, range.startOffset);
+                
+                let marcadorCompleto = marcador;
+                if (textoAntes.length > 0 && !textoAntes.endsWith('\n')) {
+                    marcadorCompleto = '\n\n' + marcador;
+                }
+                document.execCommand('insertText', false, marcadorCompleto);
+            } else {
+                document.execCommand('insertText', false, marcador);
+            }
+            
+            descArea.focus();
+        }
+
+        // FUNÇÕES DE FORMATAÇÃO
+        function aplicarFormatação(comando, valor = null) {
+            document.execCommand(comando, false, valor);
+            descArea.focus();
+        }
+        
+        function alterarTamanhoFonte() {
+            const tamanho = document.getElementById('font-size-select').value;
+            document.execCommand('fontSize', false, '7');
+            
+            const elementos = descArea.querySelectorAll('font[size="7"]');
+            elementos.forEach(el => {
+                el.removeAttribute('size');
+                el.style.fontSize = `${tamanho}px`;
+                const span = document.createElement('span');
+                span.style.fontSize = `${tamanho}px`;
+                span.innerHTML = el.innerHTML;
+                el.parentNode.replaceChild(span, el);
+            });
+            descArea.focus();
+        }
+        
+        function removerFormatacao() {
+            document.execCommand('removeFormat', false, null);
+            descArea.focus();
+        }
+        
+        // Eventos da barra de formatação
+        document.getElementById('btn-bold').addEventListener('click', () => aplicarFormatação('bold'));
+        document.getElementById('btn-italic').addEventListener('click', () => aplicarFormatação('italic'));
+        document.getElementById('btn-underline').addEventListener('click', () => aplicarFormatação('underline'));
+        document.getElementById('btn-normal').addEventListener('click', removerFormatacao);
+        document.getElementById('font-size-select').addEventListener('change', alterarTamanhoFonte);
+        
+        // Eventos dos botões de marcadores
+        document.getElementById('btn-marcador-asterisco').addEventListener('click', () => inserirMarcador('asterisco'));
+        document.getElementById('btn-marcador-circulo').addEventListener('click', () => inserirMarcador('circulo'));
+        document.getElementById('btn-marcador-numero').addEventListener('click', () => inserirMarcador('numero'));
+        document.getElementById('btn-marcador-seta').addEventListener('click', () => inserirMarcador('seta'));
+
         function imprimirRDO() {
             const dataInput = document.getElementById('data-rdo').value;
             const dataFormatada = dataInput ? dataInput.split('-').reverse().join('.') : new Date().toLocaleDateString().replace(/\//g, '.');
@@ -139,35 +368,13 @@
             window.print();
         }
 
-        descArea.addEventListener('focus', () => { 
-            if(descArea.value.trim() === '') {
-                descArea.value = " 1) "; 
+        function inicializarDescricao() {
+            if(descArea.innerText.trim() === '') {
+                descArea.innerHTML = '<strong>1) </strong>';
             }
-        });
-
-        descArea.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                const cursorPos = descArea.selectionStart;
-                const textAfterCursor = descArea.value.substring(cursorPos);
-                
-                if (textAfterCursor.trim() === "") {
-                    e.preventDefault();
-                    const lines = descArea.value.split('\n');
-                    let lastNum = 0;
-                    lines.forEach(line => {
-                        const match = line.match(/^\s*(\d+)\)/);
-                        if (match) lastNum = parseInt(match[1]);
-                    });
-                    
-                    const novoMarcador = `\n\n ${lastNum + 1}) `;
-                    descArea.value += novoMarcador;
-                    
-                    const novaPos = descArea.value.length;
-                    descArea.setSelectionRange(novaPos, novaPos);
-                    descArea.focus();
-                }
-            }
-        });
+        }
+        
+        descArea.addEventListener('focus', inicializarDescricao);
 
         function preencherEquipe() {
             const turma = document.getElementById('campo-turma').value.toUpperCase().trim();
@@ -179,8 +386,8 @@
                     const wrapper = document.createElement('div');
                     wrapper.className = "flex gap-2 border-b border-gray-100 py-0.5";
                     wrapper.innerHTML = `
-                        <input type="text" value="${membro.nome}" class="border-none p-0 w-2/3 bg-transparent uppercase" readonly>
-                        <input type="text" value="${membro.funcao}" class="border-none p-0 w-1/3 bg-transparent font-bold uppercase" readonly>
+                        <input type="text" value="${membro.nome}" class="border-none p-0 w-2/3 bg-transparent uppercase nome-equipe" readonly>
+                        <input type="text" value="${membro.funcao}" class="border-none p-0 w-1/3 bg-transparent uppercase funcao-equipe" readonly>
                     `;
                     container.appendChild(wrapper);
                 });
@@ -231,6 +438,7 @@
             atualizarDiaSemana(); 
             rdoApp.atualizarTurno();
             popularCondutores();
+            inicializarDescricao();
         };
     </script>
 </body>
