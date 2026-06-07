@@ -34,9 +34,9 @@
     <div id="printable" class="max-w-4xl mx-auto bg-white p-4 border border-gray-300">
         <div class="border-2 border-black p-2 mb-3 flex justify-between items-center bg-armac text-white">
             <img src="logo.png" alt="Logo Armac" class="h-10 w-10 object-contain bg-white p-1 rounded" onerror="this.style.display='none'">
-            <div class="font-black text-xl"> ARMAC </div>
+            <div class="font-black text-xl">ARMAC GERADORES</div>
             <h1 class="text-sm font-bold uppercase">Relatório Diário de Operação (RDO)</h1>
-            <div class="text-[12px] uppercase font-bold text-right leading-tight">Locação de Máquinas<br>Pesadas e Equipamentos</div>
+            <div class="text-[12px] uppercase font-bold text-right leading-tight">Locação de Máquinas<br>e Equipamentos</div>
         </div>
 
         <div class="grid grid-cols-2 gap-x-4 gap-y-0.5 mb-3">
@@ -58,7 +58,7 @@
         </div>
 
         <div class="flex gap-4 mb-3">
-            <div class="w-1/3">
+            <div class="w-1/4">
                 <table class="w-full text-center border-collapse border border-armac">
                     <tr class="bg-armac text-white font-bold"><td>TEMPO</td><td>M</td><td>T</td><td>N</td></tr>
                     <tr><td class="font-bold border">BOM</td><td class="border"><input type="checkbox"></td><td class="border"><input type="checkbox"></td><td class="border"><input type="checkbox"></td></tr>
@@ -66,7 +66,7 @@
                     <tr><td class="font-bold border">CHUVA</td><td class="border"><input type="checkbox"></td><td class="border"><input type="checkbox"></td><td class="border"><input type="checkbox"></td></tr>
                 </table>
             </div>
-            <div class="w-2/3 border p-2 border-armac">
+            <div class="w-2/4 border p-2 border-armac">
                 <h3 class="font-bold border-b mb-1 text-armac uppercase text-[12px]">Registro da Contratada</h3>
                 <div class="space-y-0.5">
                     <p>INÍCIO DESLOC: <input type="text" id="horario-deslocamento" class="border-b w-16"></p>
@@ -76,16 +76,29 @@
                     <p>FIM DESLOC: <input type="text" id="horario-fim-deslocamento" class="border-b w-16"></p>
                 </div>
             </div>
+            <div class="w-1/4 flex flex-col gap-1">
+                <div class="border border-armac p-1 text-center text-[10px]">
+                    <p><strong>NÚCLEO:</strong> ARMAC GERADORES</p>
+                    <p><strong></strong></p>
+                    <p><strong></strong></p>
+                </div>
+                <div class="border border-armac p-1 text-center flex-grow text-[10px]">
+                    <p><strong>TEMPO TOTAL: 7:00h</strong></p>
+                    <div class="mt-1">
+                        DESLOCAMENTO: 1h<br>TRABALHO: -1H
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="border p-2 mb-3 border-armac">
             <h3 class="font-bold mb-1 border-b text-armac uppercase">DDS: DIÁLOGO DIÁRIO DE SEGURANÇA</h3>
-            <div class="grid grid-cols-2 gap-2 mb-1">
-                <p><strong>TEMA:</strong> <input type="text" id="dds-tema" class="border-b w-full"></p>
-                <p><strong>COORDENADOR:</strong> <input type="text" id="dds-coord" class="border-b w-full"></p>
+            <div class="grid grid-cols-2 gap-4 mb-2">
+                <input type="text" id="dds-tema" value="TEMA: " class="font-bold mb-1 border-b text-black uppercase">
+                <input type="text" id="dds-coord" value="COORDENADOR: " class="font-bold mb-1 border-b text-black uppercase">
             </div>
             <h3 class="font-bold border-b mb-1 text-armac uppercase">Descrição da Atividade</h3>
-            <textarea id="descricao-atividade" rows="26"></textarea>
+            <textarea id="descricao-atividade" rows="18"></textarea>
             
             <label class="font-bold block mt-1 mb-0.5 underline text-armac uppercase">Equipe (Preenchida via Turma):</label>
             <div id="container-equipe" class="grid grid-cols-1 gap-0.5"></div>
@@ -142,7 +155,6 @@
                     const lines = descArea.value.split('\n');
                     let lastNum = 0;
                     lines.forEach(line => {
-                        // Regex ajustada para encontrar número, independente de espaços
                         const match = line.match(/^\s*(\d+)\)/);
                         if (match) lastNum = parseInt(match[1]);
                     });
